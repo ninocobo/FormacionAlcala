@@ -19,7 +19,7 @@ class Api extends Rest {
             array('estado' => "error", "msg" => "petición no encontrada"),
             array('estado' => "error", "msg" => "petición no aceptada"),
             array('estado' => "error", "msg" => "petición sin contenido"),
-            array('estado' => "error", "msg" => "Error datos incorrectos"),
+            array('estado' => "error", "msg" => "Error, longitud de los datos no permitida"),
             array('estado' => "error", "msg" => "Error borrando el contacto"),
             array('estado' => "error", "msg" => "Error actualizando los datos del contacto"),
             array('estado' => "error", "msg" => "Error buscando contactos"),
@@ -124,17 +124,21 @@ class Api extends Rest {
             $apellido = $this->datosPeticion['apellido'];
             $id=$this->datosPeticion['id'];
             if (!empty($nombre) && !empty($apellido) && $id > 0) {
-                $query = $this->_conn->prepare("update contactos set nombre=:nombre, apellido=:apellido WHERE id =:id");
-                $query->bindValue(":nombre", $nombre);
-                $query->bindValue(":apellido", $apellido);
-                $query->bindValue(":id", $id);
-                $query->execute();
-                $filasActualizadas = $query->rowCount();
-                if ($filasActualizadas == 1) {
-                    $resp = array('estado' => "correcto", "msg" => "Contacto actualizado correctamente.");
-                    $this->mostrarRespuesta($this->convertirJson($resp), 200);
+                if ((strlen($nombre) > 100) || (strlen($apellido) > 100)){
+                    $this->mostrarRespuesta($this->convertirJson($this->devolverError(3)), 400);
                 } else {
-                    $this->mostrarRespuesta($this->convertirJson($this->devolverError(5)), 400);
+                    $query = $this->_conn->prepare("update contactos set nombre=:nombre, apellido=:apellido WHERE id =:id");
+                    $query->bindValue(":nombre", $nombre);
+                    $query->bindValue(":apellido", $apellido);
+                    $query->bindValue(":id", $id);
+                    $query->execute();
+                    $filasActualizadas = $query->rowCount();
+                    if ($filasActualizadas == 1) {
+                        $resp = array('estado' => "correcto", "msg" => "Contacto actualizado correctamente.");
+                        $this->mostrarRespuesta($this->convertirJson($resp), 200);
+                    } else {
+                        $this->mostrarRespuesta($this->convertirJson($this->devolverError(5)), 400);
+                    }
                 }
             }
         }
