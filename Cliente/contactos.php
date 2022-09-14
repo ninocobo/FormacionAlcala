@@ -84,8 +84,8 @@
                                   <td contenteditable='true'><input class='form-control' type='text' name='nombre".$data[$i]['id']."' value='".$data[$i]['nombre']."' maxlength='100'></td>
                                   <td contenteditable='true'><input class='form-control' type='text' name='apellido".$data[$i]['id']."' value='".$data[$i]['apellido']."' maxlength='100'></td>
                                   <td><input class='form-control' type='text' name='dni".$data[$i]['id']."' value='".$data[$i]['dni']."' readonly></td>
-                                  <td><button class='btn btn-danger'  name='borrar' value='".$data[$i]['id']."'>Borrar Usuario</button></td>
-                                  <td><button class='btn btn-success'  name='actu' value='".$data[$i]['id']."'>Modificar nombre</button></td>";
+                                  <td><button class='btn btn-danger'  name='borrar' value='".$data[$i]['id']."'>Borrar Contacto</button></td>
+                                  <td><button class='btn btn-success'  name='actu' value='".$data[$i]['id']."'>Modificar Contacto</button></td>";
                             echo "</tr>";
                         }
                     ?>
